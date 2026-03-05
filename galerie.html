@@ -2,39 +2,149 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Galerie</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galerie Pro DonKari</title>
 <style>
-
+:root{
+--bg:#0f0f0f; --text:white; --card:#1c1c1c;
+}
 body{
-margin:0;
-font-family:Arial;
-background:#0f0f0f;
-color:white;
-text-align:center;
+margin:0; font-family:Arial; background:var(--bg); color:var(--text);
 }
-
-h1{
-margin-top:40px;
+header{
+padding:20px; display:flex; justify-content:space-between; align-items:center;
+background:rgba(0,0,0,0.6); backdrop-filter:blur(8px);
 }
-
+h1{margin:0;font-size:40px;}
+button, .toggleMode{
+padding:8px 16px; border:none; border-radius:20px; cursor:pointer;
+transition:0.3s; font-weight:600;
+}
+button:hover, .toggleMode:hover{transform:scale(1.05);}
 #dropzone{
-margin:40px auto;
-width:80%;
-padding:60px;
-border:2px dashed #555;
-border-radius:20px;
+margin:20px auto; width:90%; padding:60px;
+border:2px dashed #555; border-radius:20px; text-align:center;
+transition:0.3s;
 }
-
+#dropzone:hover{border-color:white;}
+#fileInput{margin-top:10px;}
 .gallery{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:20px;
-padding:40px;
+column-count:3; column-gap:20px; padding:20px;
+}
+.image-card{
+position:relative; margin-bottom:20px;
+display:inline-block; width:100%;
+}
+.gallery img{
+width:100%; border-radius:15px; cursor:pointer; transition:0.3s;
+}
+.gallery img:hover{transform:scale(1.05);}
+.delete{
+position:absolute; top:10px; right:10px; background:red; border:none;
+color:white; border-radius:50%; width:25px; height:25px; cursor:pointer;
+}
+#viewer{
+position:fixed; top:0; left:0; width:100%; height:100%;
+background:rgba(0,0,0,0.95); display:none;
+justify-content:center; align-items:center; z-index:9999;
+}
+#viewer img{max-width:90%; max-height:90%; border-radius:20px;}
+.downloadBtn{
+position:absolute; bottom:20px; right:20px;
+padding:10px 20px; border-radius:10px; background:white; color:black; font-weight:600;
+cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Galerie Pro</h1>
+<div>
+<button class="toggleMode">Mode clair</button>
+</div>
+</header>
+
+<div id="dropzone">
+Glisse tes images ici ou clique pour uploader
+<br>
+<input type="file" id="fileInput" multiple>
+</div>
+
+<div class="gallery" id="gallery"></div>
+
+<div id="viewer" onclick="closeViewer()">
+<img id="viewerImg">
+<button class="downloadBtn" id="downloadBtn">Télécharger</button>
+</div>
+
+<script>
+let gallery=document.getElementById("gallery")
+let dropzone=document.getElementById("dropzone")
+let fileInput=document.getElementById("fileInput")
+let viewer=document.getElementById("viewer")
+let viewerImg=document.getElementById("viewerImg")
+let downloadBtn=document.getElementById("downloadBtn")
+let toggleModeBtn=document.querySelector(".toggleMode")
+
+let images=JSON.parse(localStorage.getItem("images"))||[]
+
+function saveImages(){localStorage.setItem("images",JSON.stringify(images))}
+function displayImages(){
+gallery.innerHTML=""
+images.forEach((src,index)=>{
+let card=document.createElement("div"); card.className="image-card"
+let img=document.createElement("img"); img.src=src
+img.onclick=()=>openViewer(src)
+let del=document.createElement("button"); del.innerHTML="×"; del.className="delete"
+del.onclick=()=>{images.splice(index,1); saveImages(); displayImages()}
+card.appendChild(img); card.appendChild(del)
+gallery.appendChild(card)
+})
 }
 
-.gallery img{
-width:100%;
+function handleFiles(files){
+for(let file of files){
+if(file.type.startsWith("image")){
+let reader=new FileReader()
+reader.onload=function(e){images.push(e.target.result); saveImages(); displayImages()}
+reader.readAsDataURL(file)
+}
+}
+}
+
+dropzone.addEventListener("dragover",e=>{e.preventDefault()})
+dropzone.addEventListener("drop",e=>{e.preventDefault(); handleFiles(e.dataTransfer.files)})
+fileInput.addEventListener("change",e=>{handleFiles(e.target.files)})
+
+function openViewer(src){
+viewer.style.display="flex"; viewerImg.src=src
+downloadBtn.onclick=()=>{let a=document.createElement("a"); a.href=src; a.download="image.png"; a.click()}
+}
+function closeViewer(){viewer.style.display="none"}
+
+// mode clair/sombre
+let dark=true
+toggleModeBtn.onclick=()=>{
+dark=!dark
+if(dark){
+document.documentElement.style.setProperty("--bg","#0f0f0f")
+document.documentElement.style.setProperty("--text","white")
+document.documentElement.style.setProperty("--card","#1c1c1c")
+toggleModeBtn.textContent="Mode clair"
+}else{
+document.documentElement.style.setProperty("--bg","white")
+document.documentElement.style.setProperty("--text","black")
+document.documentElement.style.setProperty("--card","#eee")
+toggleModeBtn.textContent="Mode sombre"
+}
+}
+
+displayImages()
+</script>
+
+</body>
+</html>width:100%;
 border-radius:15px;
 }
 
