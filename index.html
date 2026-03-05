@@ -1,36 +1,164 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>DonKari</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body{
-margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-background:#0f0f0f;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-flex-direction:column;
-text-align:center;
-}
-h1{font-size:70px;margin-bottom:20px;}
-.button{
-padding:16px 40px;
-border-radius:40px;
-background:white;color:black;
-text-decoration:none;font-weight:600;
-transition:0.3s;
-}
-.button:hover{transform:scale(1.1);}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Isaac Solverro — Trading & Portfolio</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0a0a0c;
+      --bg-card: #111114;
+      --text: #f8f9fa;
+      --text-muted: #a0a0a8;
+      --accent: #8b1e2d; /* bordeaux */
+      --accent-dark: #6d1522;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(139, 30, 45, 0.12) 0%, transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(139, 30, 45, 0.08) 0%, transparent 35%);
+      background-attachment: fixed;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.7;
+      mix-blend-mode: overlay;
+      z-index: 1;
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 4rem 1.5rem;
+      max-width: 900px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 4.8rem); /* plus petit */
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, #ffffff, #e7e7e7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 2rem;
+      line-height: 1.05;
+    }
+
+    .subtitle {
+      font-size: clamp(1.2rem, 3vw, 1.4rem);
+      color: var(--text-muted);
+      margin-bottom: 4rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+    }
+
+    .accent-word {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 48px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: white;
+      background: var(--accent);
+      border: none;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(139, 30, 45, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.7s;
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(100%);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(139, 30, 45, 0.45);
+      background: var(--accent-dark);
+    }
+
+    .btn-primary:active {
+      transform: translateY(-2px);
+    }
+
+    .tagline {
+      margin-top: 5rem;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: clamp(2.6rem, 10vw, 3.4rem); }
+      .btn-primary { padding: 16px 38px; font-size: 1.05rem; }
+    }
+  </style>
 </head>
 <body>
-<h1>DonKari</h1>
-<p>Galerie interactive Pro</p>
-<a class="button" href="galerie.html">Ouvrir la galerie</a>
+
+  <div class="grain"></div>
+
+  <main>
+    <h1>Isaac Solverro</h1>
+    
+    <p class="subtitle">
+      Portfolio professionnel • Journal de <span class="accent-word">trading</span> • Analyse de performance
+    </p>
+
+    <a href="galerie.html" class="btn-primary">
+      Accéder à l'espace
+    </a>
+
+    <div class="tagline">
+      Suivi détaillé • Statistiques avancées • Revue visuelle des setups
+    </div>
+  </main>
+
 </body>
 </html>
